@@ -29,7 +29,7 @@ exports.handler = async (event, context, callback) => {
         headers: { etag: currentEtag },
       },
     } = result;
-    if (currentEtag === `"${etag}"`) {
+    if (currentEtag === etag) {
       console.log(`Object ${name} not changed`);
       callback(null, "");
       return;
