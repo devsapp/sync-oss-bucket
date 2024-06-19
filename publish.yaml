@@ -33,6 +33,26 @@ Parameters:
       default: ""
       description: 源OSS存储桶所在地域
       x-region: all
+      enum:
+        - cn-beijing
+        - cn-hangzhou
+        - cn-shanghai
+        - cn-qingdao
+        - cn-zhangjiakou
+        - cn-huhehaote
+        - cn-shenzhen
+        - cn-chengdu
+        - cn-hongkong
+        - ap-southeast-1
+        - ap-southeast-3
+        - ap-southeast-5
+        - ap-southeast-7
+        - ap-northeast-1
+        - ap-northeast-2
+        - eu-central-1
+        - eu-west-1
+        - us-west-1
+        - us-east-1
     sourceBucket:
       title: 源OSS存储桶名
       type: string
@@ -47,6 +67,26 @@ Parameters:
       default: ""
       description: 目标OSS存储桶所在地域
       x-region: all
+      enum:
+        - cn-beijing
+        - cn-hangzhou
+        - cn-shanghai
+        - cn-qingdao
+        - cn-zhangjiakou
+        - cn-huhehaote
+        - cn-shenzhen
+        - cn-chengdu
+        - cn-hongkong
+        - ap-southeast-1
+        - ap-southeast-3
+        - ap-southeast-5
+        - ap-southeast-7
+        - ap-northeast-1
+        - ap-northeast-2
+        - eu-central-1
+        - eu-west-1
+        - us-west-1
+        - us-east-1
     destinationBucket:
       title: 目标OSS存储桶名
       type: string
