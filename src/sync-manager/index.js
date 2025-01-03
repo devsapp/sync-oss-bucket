@@ -29,6 +29,8 @@ exports.initialize = async (context, callback) => {
       accessKeySecret: context.credentials.accessKeySecret,
       securityToken: context.credentials.securityToken,
       endpoint: `${context.accountId}.${context.region}-internal.fc.aliyuncs.com`,
+      readTimeout: 100000,
+      connectTimeout: 100000,
     })
   );
 
@@ -38,6 +40,7 @@ exports.initialize = async (context, callback) => {
 exports.handler = async (event, context, callback) => {
   let continuationToken = "";
   let stop = false;
+  const failedTasks = []
 
   while (!stop) {
     const { nextContinuationToken, objects } = await ossClient.listV2({
@@ -49,15 +52,18 @@ exports.handler = async (event, context, callback) => {
     } else {
       stop = true;
     }
+    
     await Promise.all(
-      objects.map((obj) => createObjectSyncTask(obj.name, obj.etag))
+      objects.map((obj) => createObjectSyncTask(obj.name, obj.etag, failedTasks))
     );
   }
 
-  callback(null, "");
+  callback(null, JSON.stringify({
+    failedTasks
+  }));
 };
 
-const createObjectSyncTask = async (name, etag) => {
+const createObjectSyncTask = async (name, etag, failedTasks) => {
   try {
     await fcClient.invokeFunctionWithOptions(
       workerFunctionName,
@@ -78,8 +84,10 @@ const createObjectSyncTask = async (name, etag) => {
     );
     console.log(`Create sync object task success for ${name}`);
   } catch (error) {
+    console.error(error)
     console.log(
       `Create sync object task failed for ${name} due to "${error.data?.Message}"`
     );
+    failedTasks.push(name)
   }
 };
